@@ -6,7 +6,6 @@ test_board_empty = ['#',' ',' ',' ',' ',' ',' ',' ',' ',' ']
 
 # Board Layout
 def display_board(board):
-    print('\n ')
     print(board[1]+' | '+board[2]+' | '+board[3])
     print('-- --- ---')
     print(board[4]+' | '+board[5]+' | '+board[6])
@@ -29,7 +28,7 @@ def place_marker(board, marker, position):
     board[position] = marker
 
 #all rows, all columns, 2 diagpnals
-def win_check(board,filled):
+def winner_check(board,filled):
     return((board[1] ==filled and board[2] ==filled and board[3]==filled) or
     (board[4] ==filled and board[5] ==filled and board[6]==filled) or
     (board[7] ==filled and board[8] ==filled and board[9]==filled) or
@@ -55,17 +54,16 @@ def space_check(board, position):
 #Check for a fully filled board 
 def full_board_check(board):
     for f in range(1,10):
-        if space_check(board,f) == False:
+        if space_check(board, f):
             return False
-        else:
-            return True
+    return True
 
 #Choosing where player wants to mark 
 def player_choice(board):
     position = 0
     
     while position not in [1,2,3,4,5,6,7,8,9] or not space_check(board, position):
-        position = int(input('Select a spot 1 - 9\n'))
+        position = int(input('Select a spot 1 - 9 {}\n'.format(turn)))
         
     return position
 
@@ -78,30 +76,29 @@ print('Tic-Tac-Toe by Cory Parker')
 input('Press Enter to Continue\n')
 
 while True:
-    # Reset 
-    theBoard = [' '] * 10
+    # Reset and choose turn
+    theBoard = [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ']
     player1_marker, player2_marker = player_input()
     turn = choose_first()
     print(turn)
     
     play_game = input('Ready to start Y or N\n')
     
-    if play_game.lower()[0] == 'y':
+    if play_game.lower() == 'y':
         game_on = True
     else:
         game_on = False
-
+#Game Startup
     while game_on:
         if turn == 'Player 1':
-            # Player1 turn.
-            
+            # Player1 turn
             display_board(theBoard)
             position = player_choice(theBoard)
             place_marker(theBoard, player1_marker, position)
 
-            if win_check(theBoard, player1_marker):
+            if winner_check(theBoard, player1_marker):
                 display_board(theBoard)
-                print('Player 1 has won')
+                print('Player 1 Wins')
                 game_on = False
             else:
                 if full_board_check(theBoard):
@@ -118,17 +115,17 @@ while True:
             position = player_choice(theBoard)
             place_marker(theBoard, player2_marker, position)
 
-            if win_check(theBoard, player2_marker):
+            if winner_check(theBoard, player2_marker):
                 display_board(theBoard)
-                print('Player 2 has won')
+                print('Player 2 Wins')
                 game_on = False
             else:
                 if full_board_check(theBoard):
                     display_board(theBoard)
-                    print('The game is a draw!')
+                    print('Tie')
                     break
                 else:
                     turn = 'Player 1'
 
-    if replay() == 'n':
+    if replay() in ('n', 'N'):
         break
