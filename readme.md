@@ -1,2 +1,2 @@
-ICS 110 Python Projects
-University of Hawaii - Maui College
+ICS 110 Python Projects from University of Hawaii - Maui College
+
